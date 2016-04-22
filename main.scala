@@ -19,7 +19,6 @@ object ScalaToRTest {
     // pull the fitted coefficents back into scala
     val beta = DenseVector[Double](R.toVector[Double]("mod$coefficients"))
 
-
     R.eval("library(maps)") // fit the model in R
     R.eval("map('state')") // fit the model in R
     R.eval("my_p <- function(x) plot(x,fg='grey',bty='n')") // fit the model in R
