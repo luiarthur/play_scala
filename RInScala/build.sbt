@@ -13,7 +13,8 @@ resolvers ++= Seq(
 
 // Scala 2.9.2 is still supported for 0.2.1, but is dropped afterwards.
 scalaVersion := "2.11.8"
-
-unmanagedJars in Compile += file("/home/luiarthur/Libs/scala-2.11.8/lib/scala-jvmr.jar")
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 exportJars := true // packages and produces a jar file
+
+// Find unmanaged jars yourself.
+unmanagedJars in Compile += file("/home/luiarthur/Libs/scala-2.11.8/lib/scala-jvmr.jar")
