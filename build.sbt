@@ -16,3 +16,4 @@ scalaVersion := "2.11.8"
 
 unmanagedJars in Compile += file("/home/luiarthur/Libs/jvmr_2.11-2.11.2.1.jar")
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
+exportJars := true // packages and produces a jar file
