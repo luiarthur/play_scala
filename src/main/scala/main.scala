@@ -1,6 +1,7 @@
 import org.ddahl.jvmr.RInScala
 import breeze.stats.distributions._
 import breeze.linalg._
+import scala.io.Source
  
 object ScalaToRTest {
   def main(args: Array[String]) = {
@@ -20,9 +21,16 @@ object ScalaToRTest {
     val beta = DenseVector[Double](R.toVector[Double]("mod$coefficients"))
 
     R.eval("library(maps)") // fit the model in R
-    R.eval("map('state')") // fit the model in R
+    //R.eval("map('state')") // fit the model in R
     R.eval("my_p <- function(x) plot(x,fg='grey',bty='n')") // fit the model in R
-    R.eval("my_p(rnorm(100))") // fit the model in R
+    //R.eval("my_p(rnorm(100))") // fit the model in R
+    
+    //val rcmd = Source.fromFile("src/main/resources/myplot.R").getLines.toList.toString
+    //println(rcmd)
+    R.eval("source('src/main/resources/myplot.R')")
+    //R.eval("myplot(1000,2,4)")
+    val res = myfunc.f(3.0)
+    println(res)
  
     // print the fitted coefficents
     println(beta)
