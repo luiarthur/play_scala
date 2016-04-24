@@ -6,9 +6,6 @@ using RCall
 x = 1:10
 reval("plot($x,10:1)")
 R"plot($x,10:1)"
-rcall(plot,x=RObject(randn(20)), pch=20)
-rcall(plot,x=RObject(randn(20)), pch=20, ylab="")
-rcall(plot,x=RObject(1:10))
 
 
 # Result stored an an ROject, not julia variable
