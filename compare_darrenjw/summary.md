@@ -9,6 +9,7 @@ This is part of the replication of Darren Wilkinson's work [here][1].
 |Scala(Parallel-Colt)| 10.00s |
 |       Scala(Breeze)| 13.00s |
 
+***
 
 | |Laptop Specs |
 |:---:|:---:|
