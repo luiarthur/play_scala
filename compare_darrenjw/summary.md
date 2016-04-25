@@ -1,4 +1,4 @@
-This is part of the replication of Darren Wilkinson's work [here][1].
+This is my replication of part of Darren Wilkinson's work [here][1].
 
 ### Results
 
