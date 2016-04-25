@@ -16,7 +16,7 @@ y = R"1+1"
 # Requires that you have installed the library in R.
 R"library(maps)"
 @rlibrary("maps")
-
+R"map('county')"
 
 # reval, plotting, creating functions, etc.
 X = [1 2; 4 5; 7 8]
@@ -31,7 +31,7 @@ rapply(X,2,mean)
 rapply(r_X,2,mean)
 
 rplot(x=randn(100),pch=20,cex=2,fg="grey",bty="n") # WEIRD?! it's the ylab...
-rplot(x=randn(100),pch=20,cex=2,fg="grey",bty="n",ylab="")
+rplot(x=randn(100),pch=20,cex=2,fg="grey",bty="n",ylab="",main="Hallelujah!")
 rplot(x=randn(100,2),pch=20,cex=2,fg="grey",bty="n") # WEIRD?!
 myrplot(reval("rnorm(100)"),pch=20,cex=3)
 myrplot2(linspace(100,1,100),1:100,pch=20,cex=3,bty="n")
@@ -43,8 +43,10 @@ X = randn(3,2)
 y = X * b + randn(3,1)
 @rput y # sends Julia variable "y" to R with the same name ("y")
 @rput X
-reval(rparse("mod <- lm(y ~ X)"))
+reval(rparse("mod <- lm(y ~ X-1)"))
 reval("summary(mod)")
 
 R_lm(some_str_expr) = reval(rparse("lm(" * some_str_expr * ")"))
-R_lm("y ~ X-1")
+R_summary = R"summary"
+mod = R_lm("y ~ X-1")
+R_summary(mod)
