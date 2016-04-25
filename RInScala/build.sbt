@@ -24,4 +24,4 @@ exportJars := true // packages and produces a jar file
 
 
 // These are not in standard repositories
-unmanagedJars in Compile += file("/home/luiarthur/Libs/scala-2.11.8/lib/scala-jvmr.jar")
+unmanagedJars in Compile += file("/home/luiarthur/Libs/scala-2.11.8/lib/jvmr_2.11-2.11.2.1.jar")

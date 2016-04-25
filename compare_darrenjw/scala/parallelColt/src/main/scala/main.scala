@@ -23,4 +23,5 @@ object GibbsSc {
             println(i+" "+x+" "+y)
         }
     }
+ 
 }
