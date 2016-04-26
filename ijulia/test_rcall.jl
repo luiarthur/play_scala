@@ -5,7 +5,7 @@ using RCall
 # The second and third line are the same
 x = 1:10
 reval("plot($x,10:1)")
-R"plot($x,10:1)"   
+R"plot($x,10:1)"
 
 
 # Result stored an an ROject, not julia variable
