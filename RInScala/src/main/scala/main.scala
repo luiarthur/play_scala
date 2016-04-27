@@ -1,9 +1,9 @@
-import org.ddahl.jvmr.RInScala
-import breeze.stats.distributions._
-import breeze.linalg._
-import scala.io.Source
- 
 object ScalaToRTest {
+  import org.ddahl.jvmr.RInScala
+  import breeze.stats.distributions._
+  import breeze.linalg._
+  import scala.io.Source
+ 
   def main(args: Array[String]) = {
  
     // first simulate some data consistent with a Poisson regression model
