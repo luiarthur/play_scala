@@ -1,35 +1,49 @@
 object tictac {
 
-  class Vec(val v: Array[Int]) {
-    override def toString(): String = v.mkString
-  }
+  class Cube(val at: Array[Array[Array[Int]]]) {
+    def mark (marker: Int, pos: (Int,Int,Int)): Cube = {
+      at(pos._1)(pos._2)(pos._3) = marker
+      new Cube(at)
+    }
 
-  class Mat(val m: Array[Vec]) {
-    override def toString(): String = m.mkString("\n")
-  }
+    def show() {
+      for (m <- at) {
+        for (v <- m) {
+          v.foreach(print)
+          println()
+        }
+        println()
+      }
+    }
 
-  class Cube(val c: Array[Mat]) {
-    override def toString(): String = c.mkString("\n\n")+"\n"
-    //def mark (marker: Int, pos: (Int,Int,Int)): Cube = {
-    //}
-  }
+    def win(marker: Int): Boolean = {
+      // Edit this function
+      true
+    }
+    def lose(marker: Int): Boolean = !win(marker)
 
-  object Cube {
-    def init(n: Int): Cube = {
-      val v = Array.fill(n)(0)
-      val V = new Vec(v)
-      val M = new Mat(Array.fill(n)(V))
-      val C = new Cube(Array.fill(n)(M))
-      C
+    def probWin(marker: Int, pos: (Int,Int,Int), N: Int): Double = {
+      // Edit this function
+      // prob of winning is computed by simulating N games that
+      // continue the game board and dividing the number of wins by N. 
+      // Each of the N simulations is a random game.
+      0.0
+    }
+
+    def playBoard(marker: Int) {
     }
   }
 
+  object Cube {
+    def init(n: Int): Cube = 
+      new Cube( Array.fill(n)(Array.fill(n)(Array.fill(n)(0))) )
+  }
+
   def main(args: Array[String]) {
-    val C = Cube.init(3)
-    val M = C.c(0)
-    val V = M.m(0)
-    println(V)
-    println("\nC:\n"+C)
+    val M = Cube.init(2)
+    M.show
+    M.mark(1,(1,1,1)).show
+    M.show
   }
 
 }
