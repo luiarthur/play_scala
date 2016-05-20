@@ -1,5 +1,10 @@
 package tictac
 
+/** Playing tic-tac-toe like a pro.
+ *
+ *
+ */
+
 object Tictac {
   /*
     H|_|_|_
@@ -8,14 +13,19 @@ object Tictac {
      | | |H
   */
 
+  /** 
+   * @constructor This creates a board
+   */
   class Board(val comp: Set[Int], val human: Set[Int],
               val n: Int) { // 3D Board
+
+    val allCells = (1 to n*n*n).toSet
+    val emptyCells = allCells diff comp union human
 
     def mark(player: Char, pos: Int): Board = {
       if (player == 'C') new Board(comp + pos, human, n) else
       new Board(comp, human+pos, n)
     }
-
 
     // Can I do this using tail recursion?
     override def toString(): String = {
@@ -35,11 +45,11 @@ object Tictac {
       out
     }
 
-    // Can I use recursion here?
-    val c = (0 to n*n-1).toList
-    val d = (0 to n-1).map(x=>(0 to 3).map(y=>y+x*n*n)).flatten.toList
-    val a = (0 to n-1).toList
-    val winSets:List[Set[Int]] = 
+    private val c = (0 to n*n-1).toList
+    private val a = (0 to n-1).toList
+    private val d = (0 to n-1).map(x=>(0 to 3).map(y=>y+x*n*n)).flatten.toList
+    /** Can I use recursion here? */
+    private val winSets:List[Set[Int]] = 
       ((1 to n*n by n+1).zip(0 to n-1)).map(x =>x._1+x._2*n*n).toSet ::
       ((1 to n*n by n+1).zip(n-1 to 0 by -1)).map(x=>x._1+x._2*n*n).toSet ::
       (n to n*n-1 by n-1).zip(0 to n-1).map(x => x._1+x._2*n*n).toSet ::
@@ -68,6 +78,8 @@ object Tictac {
     def playBoard(player: Char) {
       ???
     }
+
+    def show() { println(this) }
   }
 
   object Board {
