@@ -1,4 +1,6 @@
-object tictac {
+package tictac
+
+object Tictac {
   /*
     H|_|_|_
     _|H|_|_
@@ -14,22 +16,26 @@ object tictac {
       new Board(comp, human+pos, n)
     }
 
-    def show() {
-      println()
+
+    // Can I do this using tail recursion?
+    override def toString(): String = {
+      var out = "" // Can I do this using val?
       for (k <- 1 to n) {
         for (j <- 1 to n) {
           for (i <- 1 to n) {
             val ind = i+n*(j-1)+n*n*(k-1)
             val p = if (comp contains ind) "C" else 
                     if (human contains ind) "H" else "0"
-            print(p)
+            out += p
           }
-          println()
+          out += "\n"
         }
-        println()
+        out += "\n"
       }
+      out
     }
 
+    // Can I use recursion here?
     val c = (0 to n*n-1).toList
     val d = (0 to n-1).map(x=>(0 to 3).map(y=>y+x*n*n)).flatten.toList
     val a = (0 to n-1).toList
@@ -66,17 +72,5 @@ object tictac {
 
   object Board {
     ???
-  }
-
-  def main(args: Array[String]) {
-    val B3 = new Board(Set[Int](), Set[Int](), 3)
-    val A3 = B3.mark('C',1).mark('C',14).mark('C',27)
-    A3.show
-    println(A3.win('C'))
-
-    val B4 = new Board(Set[Int](), Set[Int](), 4)
-    val A4 = B4.mark('C',1).mark('C',22).mark('C',43).mark('C',64)
-    A4.show
-    println(A4.win('C'))
   }
 }
