@@ -1,4 +1,10 @@
 object tictac {
+  /*
+    H|_|_|_
+    _|H|_|_
+    _|_|H|_
+     | | |H
+  */
 
   class Cube(val at: Array[Array[Array[Int]]]) {
     def mark (marker: Int, pos: (Int,Int,Int)): Cube = {
