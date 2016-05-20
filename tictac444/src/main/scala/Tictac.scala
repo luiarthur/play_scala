@@ -6,6 +6,9 @@ package tictac
  */
 
 object Tictac {
+  import scala.util.Random
+  private val rand = new Random(System.currentTimeMillis());
+
   /*
     H|_|_|_
     _|H|_|_
@@ -20,7 +23,7 @@ object Tictac {
               val n: Int) { // 3D Board
 
     val allCells = (1 to n*n*n).toSet
-    val emptyCells = allCells diff comp union human
+    val emptyCells = allCells diff (comp union human)
 
     def mark(player: Char, pos: Int): Board = {
       if (player == 'C') new Board(comp + pos, human, n) else
@@ -61,11 +64,29 @@ object Tictac {
       a.map(x => (n to n*n-1 by n-1).toList.map(y => y + n*n*x).toSet)
 
 
+    private def opp(player: Char): Char = if (player == 'C') 'H' else 'C'
     def win(player: Char): Boolean = {
       val p = if (player == 'C') comp else human
       winSets.exists(w => w subsetOf p)
     }
-    def lose(player: Char): Boolean = !win(player)
+    def lose(player: Char): Boolean = win(opp(player))
+    def draw(): Boolean = this.emptyCells == Set[Int]() && !win('C') && !win('P')
+    def inProg(): Boolean = this.emptyCells.size > 0 && !win('C') && !win('P')
+
+    /** Plays a random game based on this current board starting with 
+     *  `player`.
+     */
+    def random(player: Char): Board = {
+      if (this.inProg) {
+        val A = this.emptyCells.toArray
+        val cell = A( rand.nextInt(A.size) );
+        (this.mark(player,cell)).random(opp(player)) 
+      } else this
+    }
+
+    def playBoard(player: Char) {
+      ???
+    }
 
     def probWin(player: Char, pos: Int, N: Int): Double = {
       // Edit this function
@@ -75,9 +96,6 @@ object Tictac {
       ???
     }
 
-    def playBoard(player: Char) {
-      ???
-    }
 
     def show() { println(this) }
   }
