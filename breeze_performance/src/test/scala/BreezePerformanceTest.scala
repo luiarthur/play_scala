@@ -23,12 +23,12 @@ class BreezePerfSuite extends FunSuite {
     assert( z == DenseVector.zeros[Long](n) )
   }
 
+  */
   test("Parallel Huge Matrix Multiplications") {
-    val X = DenseMatrix.rand(100,400)
-    (1 to 500).toList.par.foreach(x =>  inv(X.t * X) )
+    val Xs = (1 to 500).map( x => DenseMatrix.rand(200,200) )
+    Xs.toList.foreach( x => inv(x.t * x) )
     assert(true)
   }
-  */
 
   /**
      Compare this to the implementation in julia in ../jl/test.jl
@@ -41,10 +41,12 @@ class BreezePerfSuite extends FunSuite {
      a good idea for big data, because it uses a lot of memory,
      and will slow down many other processes.
    */
+  /*
   test("Sequential Huge Matrix Multiplications") {
     val X = DenseMatrix.rand(500,500)
     (1 to 10000).toList.foreach(x =>  X.t * X )
     assert(true)
   }
+  */
 
 }
