@@ -99,9 +99,9 @@ class FunTicTacSuite extends FunSuite  {
       def combine(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s*a
       def combine2(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s+a
       val dir2 = dir1.reduceLeft(combine)
-      val dir = Set( dir2, Set(+n*n,-n*n,0) ).reduceLeft(combine2) union Set(+n*n, -n*n) 
-      println(dir)
-      println(dir.size)
+      val dirs = Set( dir2, Set(+n*n,-n*n,0) ).reduceLeft(combine2) union Set(+n*n, -n*n) 
+      println(dirs)
+      println(dirs.size)
 
 
       // What here?...
