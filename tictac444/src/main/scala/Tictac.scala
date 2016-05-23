@@ -72,32 +72,69 @@ object Tictac {
     def lose(player: Char): Boolean = win(opp(player))
     def draw(): Boolean = this.emptyCells == Set[Int]() && !win('C') && !win('P')
     def inProg(): Boolean = this.emptyCells.size > 0 && !win('C') && !win('P')
+    def winner(): Char = {
+      if (!this.draw) {
+        if (this.win('C')) 'C' else 'H'
+      } else 'D'
+    }
 
+    def randMove(player: Char): Board = {
+      val A = this.emptyCells.toArray
+      val cell = A( rand.nextInt(A.size) );
+      this.mark(player, cell)
+    }
     /** Plays a random game based on this current board starting with 
      *  `player`.
      */
-    def random(player: Char): Board = {
+    def randomGame(player: Char): Board = {
       if (this.inProg) {
         val A = this.emptyCells.toArray
         val cell = A( rand.nextInt(A.size) );
-        (this.mark(player,cell)).random(opp(player)) 
+        randMove(player).randomGame(opp(player)) 
       } else this
     }
 
-    def playBoard(player: Char) {
-      ???
+    def winGame(player: Char): Int = if (this.winner == player) 1 else 0
+
+    /** Edit this function
+     *  prob of winning is computed by simulating N games that
+     *  continue the game board and dividing the number of wins by N. 
+     *  Each of the N simulations is a random game.
+     */
+    def probWin(player: Char, pos: Int, N: Int = 1000): Double = {
+      def sumWin(): Int = (1 to N).toList.map(x => this.mark(player,pos).
+          randomGame(opp(player)).winGame(player)).sum
+      sumWin() / N.toDouble
+    }
+    def smartMove(player: Char, N: Int = 100): Int = {
+      val cells = this.emptyCells.toList.par
+      val probs = cells.map(x => this.probWin(player,x,N)) zip cells
+      probs.maxBy(_._1)._2
     }
 
-    def probWin(player: Char, pos: Int, N: Int): Double = {
-      // Edit this function
-      // prob of winning is computed by simulating N games that
-      // continue the game board and dividing the number of wins by N. 
-      // Each of the N simulations is a random game.
-      ???
+    def playBoard(player: Char, N: Int = 1000): Board = {
+      if (this.inProg) {
+        if (player=='H') {
+          println("Current Board:")
+          this.show
+          println("Enter your move as an Integer")
+          val move = readInt()
+          this.mark('H',move).playBoard('C',N)
+        } else {
+          val move = this.smartMove('C',N)
+          this.mark('C',move).playBoard('H',N)
+        }
+      } else {
+        println("###################################")
+        show()
+        if ( draw() ) println("It's a draw!") else 
+          if ( winner() == 'H' ) println("You win!") else println("You lose.")
+        println("End of Game")
+        this
+      }
     }
 
-
-    def show() { println(this) }
+    def show() { print(this) }
   }
 
   object Board {

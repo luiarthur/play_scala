@@ -59,4 +59,42 @@ class FunTicTacSuite extends FunSuite  {
       val B4 = new Board(Set[Int](), Set[Int](), 4)
       assert(B4.mark('C',4).mark('H',3).emptyCells == (1 to 64).filter(x => x != 4 && x != 3).toSet)
     }
+
+    test("Play Random 3 Board") {
+      val n = 3
+      val B = new Board(Set[Int](), Set[Int](), n)
+      val Brand = B.randomGame('H')
+      println("The winner is: " + Brand.winner() )
+      Brand.show
+      assert(true)
+    }
+
+    test("Play Random 4 Board") {
+      val B4 = new Board(Set[Int](), Set[Int](), 4)
+      val Brand = B4.mark('C',1).randomGame('H')
+      println("The winner is: " + Brand.winner() )
+      Brand.show
+      assert(true)
+    }
+
+    test("Calculate Prob of End Game 1") {
+      val B = new Board(Set[Int](), Set[Int](), 3)
+      val C = B.mark('C',1).mark('H',2).mark('C',4).mark('H',5)
+      println("P(C wins | C moves to 7) = " + C.probWin('C',7))
+      C.show
+      assert(true)
+    }
+
+    test("Play a smart move") {
+      val B = new Board(Set[Int](), Set[Int](), 3)
+      val Brand = B.mark('C',1).mark('H',2).mark('C',4).mark('H',5)
+      println("Computer should move to: " + Brand.smartMove('C'))
+      Brand.show
+      assert(true)
+    }
+
+    //test("Play vs Computer") {
+    //  val B = new Board(Set[Int](), Set[Int](), 3)
+    //  B.playBoard('H',100)
+    //}
 }
