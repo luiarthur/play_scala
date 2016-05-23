@@ -52,6 +52,7 @@ object Tictac {
     private val a = (0 to n-1).toList
     private val d = (0 to n-1).map(x=>(0 to 3).map(y=>y+x*n*n)).flatten.toList
     /** Can I use recursion here? */
+    /** Missing some cases here. Otherwise, the program is complete.*/
     private val winSets:List[Set[Int]] = 
       ((1 to n*n by n+1).zip(0 to n-1)).map(x =>x._1+x._2*n*n).toSet ::
       ((1 to n*n by n+1).zip(n-1 to 0 by -1)).map(x=>x._1+x._2*n*n).toSet ::
