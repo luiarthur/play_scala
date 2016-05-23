@@ -7,6 +7,7 @@ object Main extends App {
   val n = readInt()
   println("Enter Think Time (positive integer): ")
   val N = readInt()
-  val B = new Board(Set[Int](), Set[Int](), n)
+  val B4 = new MotherBoard(n)
+  val B = new B4.Board(Set[Int](), Set[Int]())
   B.playBoard('H',N)
 }
