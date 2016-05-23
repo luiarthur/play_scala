@@ -30,9 +30,20 @@ class BreezePerfSuite extends FunSuite {
   }
   */
 
+  /**
+     Compare this to the implementation in julia in ../jl/test.jl
+     The time taken to perform this in Scala is 60s.
+     The time taken to perform this is Julia is 50s.
+     Yes, Julia is faster, but the memory management in Julia isn't 
+     as efficient. At one point, Julia uses over 100% of RAM. 
+     Scala stays at around 3.6% of total RAM. If you have plenty 
+     of RAM, Julia is great. Still, something tells me julia is not 
+     a good idea for big data, because it uses a lot of memory,
+     and will slow down many other processes.
+   */
   test("Sequential Huge Matrix Multiplications") {
     val X = DenseMatrix.rand(500,500)
-    (1 to 1000).toList.foreach(x =>  X.t * X )
+    (1 to 10000).toList.foreach(x =>  X.t * X )
     assert(true)
   }
 
