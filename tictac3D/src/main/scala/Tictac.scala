@@ -132,10 +132,12 @@ object Tictac {
        *  continue the game board and dividing the number of wins by N. 
        *  Each of the N simulations is a random game.
        */
-      def probWin(player: Char, pos: Int, N: Int = 1000): Double = {
-        def sumWin(): Int = (1 to N).toList.map(x => this.mark(player,pos).
+      def probWin(player: Char, pos: Int, N: Int = 100): Double = {
+        val sumWin = (1 to N).toList.map(x => this.mark(player,pos).
             randomGame(opp(player)).winGame(player)).sum
-        sumWin() / N.toDouble
+        val sumOWin = (1 to N).toList.map(x => this.mark(player,pos).
+            randomGame(opp(player)).winGame(opp(player))).sum
+        sumWin.toDouble / sumOWin.toDouble
       }
       def smartMove(player: Char, N: Int = 100): Int = {
         val cells = this.emptyCells.toList.par
@@ -143,7 +145,7 @@ object Tictac {
         probs.maxBy(_._1)._2
       }
 
-      def playBoard(player: Char, N: Int = 1000): Board = {
+      def playBoard(player: Char, N: Int = 100): Board = {
         def readMove(): Int = {
           println("Enter your move as an Integer")
           val x = readInt()
