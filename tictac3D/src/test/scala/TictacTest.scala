@@ -40,6 +40,7 @@ class FunTicTacSuite extends FunSuite  {
     test("Check 3D diag win not in Progress in 4 x 4 x 4") {
       val b4 = new B4.Board(Set[Int](), Set[Int]())
       val a4 = b4.mark('C',1).mark('C',22).mark('C',43).mark('C',64)
+      b4.show
       assert(!a4.inProg)
     }
 
@@ -89,27 +90,6 @@ class FunTicTacSuite extends FunSuite  {
       val brand = b4.mark('C',1).mark('H',2).mark('C',4).mark('H',5)
       println("Computer should move to: " + brand.smartMove('C'))
       brand.show
-      assert(true)
-    }
-
-    // implement this
-    test("Create winsets") {
-      val n = 3
-      val dir1 = Set( Set(1,n,n-1,n+1), Set(-1,+1) )
-      def combine(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s*a
-      def combine2(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s+a
-      val dir2 = dir1.reduceLeft(combine)
-      val dirs = Set( dir2, Set(+n*n,-n*n,0) ).reduceLeft(combine2) union Set(+n*n, -n*n) 
-      println(dirs)
-      println(dirs.size)
-
-
-      // What here?...
-      def ws( S: Set[Int]  = Set[Int](), dir: Int = 1 ): Set[ Set[Int] ] = {
-        if (S.size == n) S else {
-        }
-        ???
-      }
       assert(true)
     }
 }

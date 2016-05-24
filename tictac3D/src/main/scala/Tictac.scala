@@ -5,7 +5,6 @@ package tictac
  *
  */
 
-class Tictac(val N: Int)
 object Tictac {
   import scala.util.Random
   private val rand = new Random(System.currentTimeMillis());
@@ -18,23 +17,53 @@ object Tictac {
   */
 
   class MotherBoard(val n: Int) {
-    private val c = (0 to n*n-1).toList
-    private val a = (0 to n-1).toList
-    private val d = (0 to n-1).map(x=>(0 to 3).map(y=>y+x*n*n)).flatten.toList
-    /** Can I use recursion here? */
-    /** Missing some cases here. Otherwise, the program is complete.*/
-    private val winSets:List[Set[Int]] = {
-      ((1 to n*n by n+1).zip(0 to n-1)).map(x =>x._1+x._2*n*n).toSet ::
-      ((1 to n*n by n+1).zip(n-1 to 0 by -1)).map(x=>x._1+x._2*n*n).toSet ::
-      (n to n*n-1 by n-1).zip(0 to n-1).map(x => x._1+x._2*n*n).toSet ::
-      (n to n*n-1 by n-1).zip(n-1 to 0 by -1).map(x=>x._1+x._2*n*n).toSet ::
-      c.map(x => (1 to n).toList.map(y => y + n*x).toSet) :::
-      d.map(x => (1 to n*n by n).toList.map(y => y + x).toSet) :::
-      c.map(x => (1 to n*n*n by n*n).toList.map(y => y + n*x).toSet) ::: 
-      a.map(x => (1 to n*n by n+1).toList.map(y => y + n*n*x).toSet) ::: 
-      a.map(x => (n to n*n-1 by n-1).toList.map(y => y + n*n*x).toSet)
-    }
     val allCells = (1 to n*n*n).toSet
+    private val dir1 = Set( Set(1,n,n-1,n+1), Set(-1,+1) )
+    private def combine(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s*a
+    private def combine2(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s+a
+    private val dir2 = dir1.reduceLeft(combine)
+    private val dirs = Set( dir2, Set(+n*n,-n*n,0) ).reduceLeft(combine2) union Set(+n*n, -n*n) 
+
+    private val np1 = n+1
+    private val nm1 = n-1
+    private def oob(i: Int): Boolean = i < 1 || i > n*n*n // out of bounds
+    private def oos(f: Int, t: Int, d: Int): Boolean = { // not contiguous
+      val x = math.abs(d) 
+      if (x < n*n) {
+        val sameplane = (f-1) / (n*n) == (t-1) / (n*n)
+        if ( !sameplane ) true else {
+          val good = x match {
+            case 1 => (f-1)/n == (t-1)/n // same row
+            case `np1` => (f-1)/n < (t-1)/n 
+            case `nm1` => (f-1)/n < (t-1)/n
+            case `n` => (f-1) % n == (t-1) % n //
+            case _ => true
+          }
+          !good || !sameplane 
+        }
+      } else {
+        false
+      }
+    }
+
+    private def anyoos(S: Set[Int], d: Int): Boolean = oos(S.min,S.max,d)
+    private def allContig(S: Set[Int], d: Int): Boolean = !anyoos(S,d)
+
+    private def build(from: Int, dir: Int): Set[Int] = {
+      def loop(f: Int, S: Set[Int]): Set[Int] = {
+        if ( S.size == n && !oob(f) && allContig(S,dir) ) S else {
+          val dest = f + dir
+          val newS = S + dest
+          if (oob(dest) || newS.size > n) S.empty else loop(dest,newS)
+        }
+      }
+      loop(from,Set(from))
+    }
+    private val winSets: List[Set[Int]] = {
+      val ws = for(i <- (1 to n*n*n); j <- dirs) yield build(i,j)
+      ws.toSet.filterNot(x => x == Set.empty).toList
+    }
+        
 
     /** 
      * @constructor This creates a board
@@ -115,12 +144,16 @@ object Tictac {
       }
 
       def playBoard(player: Char, N: Int = 1000): Board = {
+        def readMove(): Int = {
+          println("Enter your move as an Integer")
+          val x = readInt()
+          if ( !(emptyCells contains x) ) readMove() else x
+        }
         if (this.inProg) {
+          println("Current Board:")
+          this.show
           if (player=='H') {
-            println("Current Board:")
-            this.show
-            println("Enter your move as an Integer")
-            val move = readInt()
+            val move = readMove()//readInt()
             this.mark('H',move).playBoard('C',N)
           } else {
             val move = this.smartMove('C',N)
