@@ -1,4 +1,4 @@
-# 3D Tic-Tac-Toe Game
+# 3D Tic-Tac-Toe in Scala
 
 1. Build the game
   - In the tictac3D directory, run `sbt assembly` in the terminal. This will produce the jar file `tictac3D.jar`
