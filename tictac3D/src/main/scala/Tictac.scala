@@ -18,52 +18,33 @@ object Tictac {
 
   class MotherBoard(val n: Int) {
     val allCells = (1 to n*n*n).toSet
-    private val dir1 = Set( Set(1,n,n-1,n+1), Set(-1,+1) )
-    private def combine(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s*a
-    private def combine2(acc:Set[Int], set:Set[Int]) = for (a <- acc; s <- set) yield s+a
-    private val dir2 = dir1.reduceLeft(combine)
-    private val dirs = Set( dir2, Set(+n*n,-n*n,0) ).reduceLeft(combine2) union Set(+n*n, -n*n) 
 
-    private val np1 = n+1
-    private val nm1 = n-1
-    private def oob(i: Int): Boolean = i < 1 || i > n*n*n // out of bounds
-    private def oos(f: Int, t: Int, d: Int): Boolean = { // not contiguous
-      val x = math.abs(d) 
-      if (x < n*n) {
-        val sameplane = (f-1) / (n*n) == (t-1) / (n*n)
-        if ( !sameplane ) true else {
-          val good = x match {
-            case 1 => (f-1)/n == (t-1)/n // same row
-            case `np1` => (f-1)/n < (t-1)/n 
-            case `nm1` => (f-1)/n < (t-1)/n
-            case `n` => (f-1) % n == (t-1) % n //
-            case _ => true
-          }
-          !good || !sameplane 
-        }
-      } else {
-        false
-      }
+    class Cube(val r: Int, val c: Int, val l: Int) {
+      override def toString(): String = "("+r+","+c+","+l+")"
+      val z = (l-1)*n*n + (r-1)*n + c
+      def oob(): Boolean = r<1 || r>n || c<1 || c>n || l<1 || l>n
+      def moveTo(d: (Int,Int,Int)): Cube = new Cube(r+d._1, c+d._2, l+d._3)
     }
 
-    private def anyoos(S: Set[Int], d: Int): Boolean = oos(S.min,S.max,d)
-    private def allContig(S: Set[Int], d: Int): Boolean = !anyoos(S,d)
-
-    private def build(from: Int, dir: Int): Set[Int] = {
-      def loop(f: Int, S: Set[Int]): Set[Int] = {
-        if ( S.size == n && !oob(f) && allContig(S,dir) ) S else {
-          val dest = f + dir
+    private val lst = List(-1,0,1)
+    private val dirs = (for(i <- lst; j <- lst; k <- lst) yield (i,j,k)).
+      filterNot(x => x == (0,0,0))
+    private val coord = (1 to n).toList
+    def build(start: Cube, dir: (Int,Int,Int)): Set[Cube] = {
+      def loop(s: Cube, S: Set[Cube]): Set[Cube] = {
+        if (S.size == n && !s.oob) S else {
+          val dest = s.moveTo(dir)
           val newS = S + dest
-          if (oob(dest) || newS.size > n) S.empty else loop(dest,newS)
+          if (dest.oob || newS.size > n) S.empty else loop(dest, newS)
         }
       }
-      loop(from,Set(from))
+      loop(start, Set(start))
     }
-    private val winSets: List[Set[Int]] = {
-      val ws = for(i <- (1 to n*n*n); j <- dirs) yield build(i,j)
-      ws.toSet.filterNot(x => x == Set.empty).toList
+    
+    val winSets_tmp = for(i <- coord; j <- coord; k <- coord; d <- dirs) yield { 
+      build(new Cube(i,j,k), d).map(x => x.z)
     }
-        
+    val winSets = winSets_tmp.toSet.filter(x => x != Set.empty)
 
     /** 
      * @constructor This creates a board
@@ -142,6 +123,7 @@ object Tictac {
       def smartMove(player: Char, N: Int = 100): Int = {
         val cells = this.emptyCells.toList.par
         val probs = cells.map(x => this.probWin(player,x,N)) zip cells
+        println("Computer's odds of winning: " + probs.maxBy(_._1)._1)
         probs.maxBy(_._1)._2
       }
 
@@ -165,8 +147,16 @@ object Tictac {
         } else {
           println("###################################")
           show()
-          if ( draw() ) println("It's a draw!") else 
-            if ( winner() == 'H' ) println("You win!") else println("You lose.")
+          if ( draw() ) println("It's a draw!") else {
+            if ( winner() == 'H' ) { 
+              println("You win!")
+              println(human)
+              human
+            } else {
+              println("You lose.")
+              println(comp)
+            }
+          }
           println("End of Game")
           this
         }

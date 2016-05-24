@@ -92,4 +92,13 @@ class FunTicTacSuite extends FunSuite  {
       brand.show
       assert(true)
     }
+
+    test("Correct Win Sets") {
+      assert( B4.winSets.size == 76 )
+    }
+
+    test("Print Winsets") {
+      B4.winSets.foreach(println)
+      assert(true)
+    }
 }
