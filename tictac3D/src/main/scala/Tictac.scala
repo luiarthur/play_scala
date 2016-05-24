@@ -156,6 +156,7 @@ object Tictac {
             val move = readMove()//readInt()
             this.mark('H',move).playBoard('C',N)
           } else {
+            println("Your opponent is thinking...")
             val move = this.smartMove('C',N)
             this.mark('C',move).playBoard('H',N)
           }
