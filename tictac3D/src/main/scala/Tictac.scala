@@ -108,8 +108,7 @@ object Tictac {
 
       def winGame(player: Char): Int = if (this.winner == player) 1 else 0
 
-      /** Edit this function
-       *  prob of winning is computed by simulating N games that
+      /** prob of winning is computed by simulating N games that
        *  continue the game board and dividing the number of wins by N. 
        *  Each of the N simulations is a random game.
        */
@@ -149,12 +148,12 @@ object Tictac {
           show()
           if ( draw() ) println("It's a draw!") else {
             if ( winner() == 'H' ) { 
-              println("You win!")
-              println(human)
+              print("Woohoo! You win with: ")
+              println(winSets.filter(x => x subsetOf human).flatten)
               human
             } else {
-              println("You lose.")
-              println(comp)
+              print("Simulations rock! You lose. The computer won by: ")
+              println(winSets.filter(x => x subsetOf comp).flatten)
             }
           }
           println("End of Game")
