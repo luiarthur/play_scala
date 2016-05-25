@@ -125,15 +125,38 @@ object Tictac {
       def smartMove(player: Char, N: Int = 100): Int = {
         val cells = this.emptyCells.toList.par
         val probs = cells.map(x => this.probWin(player,x,N)) zip cells
-        println("Computer's odds of winning: " + probs.maxBy(_._1)._1)
+        //println("Computer's odds of winning: " + probs.maxBy(_._1)._1)
         probs.maxBy(_._1)._2
       }
+
+      /** Super Smart Move. Doesn't work.
+       * def smartRandomGame(player: Char, N: Int): Board = {
+       *   if (this.inProg) {
+       *     this.mark(player,smartMove(player,N)).smartRandomGame(opp(player),N) 
+       *   } else this
+       * }
+       * def superProbWin(player: Char, pos: Int, N: Int): Double = {
+       *   val sumWin = (1 to N).toList.map(x => this.mark(player,pos).
+       *       smartRandomGame(opp(player),N).winGame(player)).sum
+       *   val sumOWin = (1 to N).toList.map(x => this.mark(player,pos).
+       *       smartRandomGame(opp(player),N).winGame(opp(player))).sum
+       *   sumWin.toDouble / sumOWin.toDouble
+       * }
+       * def superSmartMove(player: Char, N: Int): Int = {
+       *   val cells = this.emptyCells.toList.par
+       *   val probs = cells.map(x => this.superProbWin(player,x,N)) zip cells
+       *   //println("Computer's odds of winning: " + probs.maxBy(_._1)._1)
+       *   probs.maxBy(_._1)._2
+       * }
+       *
+       *
+       */
 
       def playBoard(player: Char, N: Int = 100): Board = {
         def readMove(): Int = {
           println("Enter your move as an Integer")
-          val x = readInt()
-          if ( !(emptyCells contains x) ) readMove() else x
+          val x = readLine()
+          if ( x == "" || !(emptyCells contains x.toInt) ) readMove() else x.toInt
         }
         if (this.inProg) {
           println("Current Board:")
@@ -144,6 +167,7 @@ object Tictac {
           } else {
             println("Your opponent is thinking...")
             val move = this.smartMove('C',N)
+            //val move = this.superSmartMove('C',N)
             this.mark('C',move).playBoard('H',N)
           }
         } else {
