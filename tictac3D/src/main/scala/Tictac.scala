@@ -60,16 +60,19 @@ object Tictac {
 
       // Can I do this using tail recursion?
       override def toString(): String = {
-        var out = "" // Can I do this using val?
+        var out = ""           // using var!!! Can I do this using val?
         for (k <- 1 to n) {
           for (j <- 1 to n) {
+            var q = ""         // using var!!! Can I do this using val?
             for (i <- 1 to n) {
               val ind = i+n*(j-1)+n*n*(k-1)
               val p = if (comp contains ind) "C" else 
-                      if (human contains ind) "H" else "0"
+                      if (human contains ind) "H" else "_"
+              q = if (ind < 10) q+"  " else q+" "
+              q += ind.toString + " "
               out += p
             }
-            out += "\n"
+            out += "  |  " + q + "\n"
           }
           out += "\n"
         }
