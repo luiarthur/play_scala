@@ -64,6 +64,7 @@ object Tictac {
         for (k <- 1 to n) {
           for (j <- 1 to n) {
             var q = ""         // using var!!! Can I do this using val?
+            out += "  "
             for (i <- 1 to n) {
               val ind = i+n*(j-1)+n*n*(k-1)
               val p = if (comp contains ind) "C" else 
@@ -109,7 +110,7 @@ object Tictac {
         } else this
       }
 
-      def winGame(player: Char): Int = if (this.winner == player) 1 else 0
+      def winGame(player: Char): Int = if (this.winner==player||this.draw) 1 else 0
 
       /** prob of winning is computed by simulating N games that
        *  continue the game board and dividing the number of wins by N. 
@@ -118,9 +119,10 @@ object Tictac {
       def probWin(player: Char, pos: Int, N: Int = 100): Double = {
         val sumWin = (1 to N).toList.map(x => this.mark(player,pos).
             randomGame(opp(player)).winGame(player)).sum
-        val sumOWin = (1 to N).toList.map(x => this.mark(player,pos).
-            randomGame(opp(player)).winGame(opp(player))).sum
-        sumWin.toDouble / sumOWin.toDouble
+        sumWin.toDouble / N.toDouble
+        //val sumOWin = (1 to N).toList.map(x => this.mark(player,pos).
+        //    randomGame(opp(player)).winGame(opp(player))).sum
+        //sumWin.toDouble / sumOWin.toDouble
       }
       def smartMove(player: Char, N: Int = 100): Int = {
         val cells = this.emptyCells.toList.par
@@ -168,6 +170,7 @@ object Tictac {
             println("Your opponent is thinking...")
             val move = this.smartMove('C',N)
             //val move = this.superSmartMove('C',N)
+            println(Console.GREEN + "Computer moved to: " + move + Console.RESET)
             this.mark('C',move).playBoard('H',N)
           }
         } else {
@@ -175,12 +178,14 @@ object Tictac {
           show()
           if ( draw() ) println("It's a draw!") else {
             if ( winner() == 'H' ) { 
-              print("Woohoo! You win with: ")
-              println(winSets.filter(x => x subsetOf human).flatten)
+              print(Console.GREEN + "Woohoo! You win with: ")
+              print(winSets.filter(x => x subsetOf human).flatten.toList.sorted)
+              println(Console.RESET)
               human
             } else {
-              print("Simulations rock! You lose. The computer won by: ")
-              println(winSets.filter(x => x subsetOf comp).flatten)
+              print(Console.GREEN + "Computer wins by: ")
+              print(winSets.filter(x => x subsetOf comp).flatten.toList.sorted)
+              println(Console.RESET)
             }
           }
           println("End of Game")
