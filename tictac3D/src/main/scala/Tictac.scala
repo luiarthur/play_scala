@@ -120,14 +120,11 @@ object Tictac {
         val sumWin = (1 to N).toList.map(x => this.mark(player,pos).
             randomGame(opp(player)).winGame(player)).sum
         sumWin.toDouble / N.toDouble
-        //val sumOWin = (1 to N).toList.map(x => this.mark(player,pos).
-        //    randomGame(opp(player)).winGame(opp(player))).sum
-        //sumWin.toDouble / sumOWin.toDouble
       }
       def smartMove(player: Char, N: Int = 100): Int = {
         val cells = this.emptyCells.toList.par
         val probs = cells.map(x => this.probWin(player,x,N)) zip cells
-        //println("Computer's odds of winning: " + probs.maxBy(_._1)._1)
+        println("Computer's prob of win or draw: " + probs.maxBy(_._1)._1)
         probs.maxBy(_._1)._2
       }
 
@@ -164,7 +161,7 @@ object Tictac {
           println("Current Board:")
           this.show
           if (player=='H') {
-            val move = readMove()//readInt()
+            val move = readMove()
             this.mark('H',move).playBoard('C',N)
           } else {
             println("Your opponent is thinking...")
