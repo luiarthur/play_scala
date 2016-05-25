@@ -12,7 +12,7 @@ for 1000 simulations (see below) is superior to that implementation in the sense
 
 The algorithm I use for play tic-tac-toe is simply 
 
-1. At each move, simulate 10<sup>i</sup> games where i is the difficulty level (1-3). (For the remainder of this doc, we assume that the number of simulations is 1000. i.e. the difficulty is set to 3.)
+1. At each move, simulate 10<sup>i</sup> games where <i>i</i> is the difficulty level (1-3). (For the remainder of this doc, we assume that the number of simulations is 1000. i.e. the difficulty is set to 3.)
 
 2. The computer picks the move that maximizes the probability of winning (based on the simulations).
 
