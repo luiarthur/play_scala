@@ -21,5 +21,8 @@ for Difficulty of 3, it shouldn't take more than a minute. (What do you
 expect?)
 
 
+### To do
+
+- implement tictac3D in Julia and compare performance
 
 [drive]: https://drive.google.com/open?id=0B7Ccueiur0BNbllhVExLTEExME0
