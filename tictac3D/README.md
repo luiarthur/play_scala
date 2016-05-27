@@ -23,6 +23,6 @@ expect?)
 
 ### To do
 
-- implement tictac3D in Julia and compare performance
+- implement tictac3D in Julia (without and with `using Lazy`) and compare performance
 
 [drive]: https://drive.google.com/open?id=0B7Ccueiur0BNbllhVExLTEExME0
