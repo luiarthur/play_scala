@@ -30,6 +30,23 @@ class BreezePerfSuite extends FunSuite {
     assert(true)
   }
 
+  /*
+    def test() { val Xs = (1 to 1000).map( x => DenseMatrix.rand(200,200) }
+    def test_par() { val Xs = (1 to 1000).par.map( x => DenseMatrix.rand(200,200) }
+
+   * test_par is much faster here. The rand isn't parallel. So we're safe.
+   *
+   * For this case:
+   *   val Xs = (1 to 500).map( x => DenseMatrix.rand(200,200) )
+   *   Xs.toList.foreach( x => inv(x.t * x) )
+   * I think the key is if the matrix is big, we are reaping the benefits
+   * of multiple cores despite the List is non-parallel. On the other hand,
+   * for small matrices, we get slower. But then, the matrices are smaller,
+   * so they invert quickly anyway. Still, it would be nice if there was a way
+   * to do openblas_set_num_threads. Also, this depends on your system's openblas.
+   * If none is found, breeze just uses the netlib-java provided ones.
+   */
+
   /**
      Compare this to the implementation in julia in ../jl/test.jl
      The time taken to perform this in Scala is 60s.

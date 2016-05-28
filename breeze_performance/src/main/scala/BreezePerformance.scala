@@ -13,5 +13,7 @@ object BreezePerf {
       y.toList
     }
   }
+  object Woohoo {
+  }
 
 }
