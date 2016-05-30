@@ -104,8 +104,6 @@ object Tictac {
        */
       def randomGame(player: Char): Board = {
         if (this.inProg) {
-          val A = this.emptyCells.toArray
-          val cell = A( rand.nextInt(A.size) );
           randMove(player).randomGame(opp(player)) 
         } else this
       }
