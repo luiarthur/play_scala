@@ -94,10 +94,22 @@ object Tictac {
         } else 'D'
       }
 
+      def winMove(player: Char): Int = {
+        val s = if (player == 'C') comp else human
+        if ( s.size >= 3 ) {
+          val w = emptyCells.filter( w => this.mark(player,w).win(player) )
+          if (w.size>0) w.head else 0
+        } else 0
+      }
+
       def randMove(player: Char): Board = {
-        val A = this.emptyCells.toArray
-        val cell = A( rand.nextInt(A.size) );
-        this.mark(player, cell)
+        //new stuff
+        val w = winMove(player)
+        if (w>0) this.mark(player,w) else {
+          val A = this.emptyCells.toArray
+          val cell = A( rand.nextInt(A.size) );
+          this.mark(player, cell)
+        }
       }
       /** Plays a random game based on this current board starting with 
        *  `player`.
