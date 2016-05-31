@@ -132,10 +132,16 @@ object Tictac {
         sumWin.toDouble / N.toDouble
       }
       def smartMove(player: Char, N: Int = 100): Int = {
-        val cells = this.emptyCells.toList.par
-        val probs = cells.map(x => this.probWin(player,x,N)) zip cells
-        println("Computer's prob of win or draw: " + probs.maxBy(_._1)._1)
-        probs.maxBy(_._1)._2
+        //val cells = this.emptyCells.toList.par
+        //val probs = cells.map(x => this.probWin(player,x,N)) zip cells
+        val w = winMove(player)
+        if (w>0) w else {
+          val probs = emptyCells.toList.par.
+            map(x => (probWin(player,x,N), x) )
+          val pmb = probs.maxBy(_._1)
+          println("Computer's prob of win or draw: " + pmb._1)
+          pmb._2
+        }
       }
 
       /** Super Smart Move. Doesn't work.
