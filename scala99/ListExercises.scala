@@ -27,6 +27,27 @@ bumpyList flatMap {
   case e => List(e)
 }
 
-//08: Eliminate consequtive dups
-val redundant = List(3,3,3,1,2,2,2,2,2,4,4,4)
-???
+//08: Eliminate consecutive dups
+val redundant = List(3,3,3,1,2,2,2,2,2,4,4,4,3)
+def compress[T](ls: List[T]): List[T] = ls match {
+  case h :: tail => h :: compress(tail).dropWhile( _ == h )
+  case Nil => Nil
+}
+compress(redundant)
+
+//09: pack consecutive dups into sublists
+def pack[T](ls: List[T]): List[List[T]] = {
+  if (ls.isEmpty) List(ls) else {
+    val (packed, next) = ls span { _ == ls.head }
+    if (next.isEmpty) List(packed) else packed :: pack(next)
+  }
+}
+pack(redundant)
+
+//10: Run-length encoding of list
+def encode[T](ls: List[T]): List[(Int,T)] = {
+  val packedLs = pack(ls)
+  packedLs.map(_.size) zip packedLs.map(_.head)
+}
+encode(redundant)
+
