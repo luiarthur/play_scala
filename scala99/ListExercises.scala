@@ -45,9 +45,6 @@ def pack[T](ls: List[T]): List[List[T]] = {
 pack(redundant)
 
 //10: Run-length encoding of list
-def encode[T](ls: List[T]): List[(Int,T)] = {
-  val packedLs = pack(ls)
-  packedLs.map(_.size) zip packedLs.map(_.head)
-}
+def encode[T](ls: List[T]): List[(Int,T)] = pack(ls) map { x => (x.size, x.head) }
 encode(redundant)
-
+encode(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)) == List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e))
