@@ -28,7 +28,7 @@ class FunTicTacSuite extends FunSuite  {
     test("Check 3D diag draw in 4 x 4 x 4") {
       val b4 = new B4.Board(Set[Int](), Set[Int]())
       val a4 = b4.mark('C',1).mark('C',22).mark('C',43).mark('C',64)
-      assert(!a4.draw())
+      assert(!a4.draw)
     }
 
     test("Check 3D diag lose in 4 x 4 x 4") {
@@ -64,7 +64,7 @@ class FunTicTacSuite extends FunSuite  {
       val n = 3
       val b = new B4.Board(Set[Int](), Set[Int]())
       val brand = b.randomGame('H')
-      println("The winner is: " + brand.winner() )
+      println("The winner is: " + brand.winner )
       brand.show
       assert(true)
     }
@@ -72,7 +72,7 @@ class FunTicTacSuite extends FunSuite  {
     test("Play Random 4 Board") {
       val b4 = new B4.Board(Set[Int](), Set[Int]())
       val brand = b4.mark('C',1).randomGame('H')
-      println("The winner is: " + brand.winner() )
+      println("The winner is: " + brand.winner )
       brand.show
       assert(true)
     }

@@ -27,10 +27,8 @@ object Tictac {
     }
 
     private val lst = List(-1,0,1)
-    //private val dirs = (for(i <- lst; j <- lst; k <- lst) yield (i,j,k)).
-    //  filterNot(x => x == (0,0,0))
-    private val dirs = (for(i <- lst; j <- lst; k <- lst) yield (i,j,k)).
-      filterNot(x => x == (0,0,0))
+    private val dirs = {for(i <- lst; j <- lst; k <- lst) yield (i,j,k)}.filterNot(x => x == (0,0,0))
+    //private val dirs = for(i <- lst; j <- lst; k <- lst; if (i,j,k) != (0,0,0)) yield (i,j,k)
     private val coord = (1 to n).toList
     def build(start: Cube, dir: (Int,Int,Int)): Set[Cube] = {
       def loop(s: Cube, S: Set[Cube]): Set[Cube] = {
@@ -55,13 +53,13 @@ object Tictac {
 
       val emptyCells = allCells diff (comp union human)
 
-      def mark(player: Char, pos: Int): Board = {
+      def mark(player: Char, pos: Int) = {
         if (player == 'C') new Board(comp + pos, human) else
         new Board(comp, human+pos)
       }
 
       // Can I do this using tail recursion?
-      override def toString(): String = {
+      override def toString = {
         var out = ""           // using var!!! Can I do this using val?
         for (k <- 1 to n) {
           for (j <- 1 to n) {
@@ -82,24 +80,24 @@ object Tictac {
         out
       }
 
-      private def opp(player: Char): Char = if (player == 'C') 'H' else 'C'
-      def win(player: Char): Boolean = {
+      private def opp(player: Char) = if (player == 'C') 'H' else 'C'
+      def win(player: Char) = {
         val p = if (player == 'C') comp else human
         winSets.exists(w => w subsetOf p)
       }
-      def lose(player: Char): Boolean = win(opp(player))
-      def draw(): Boolean = this.emptyCells == Set[Int]() && !win('C') && !win('P')
-      def inProg(): Boolean = this.emptyCells.size > 0 && !win('C') && !win('P')
-      def winner(): Char = {
-        if (!this.draw) {
-          if (this.win('C')) 'C' else 'H'
+      def lose(player: Char) = win(opp(player))
+      def draw = emptyCells == Set[Int]() && !win('C') && !win('P')
+      def inProg = emptyCells.size > 0 && !win('C') && !win('P')
+      def winner = {
+        if (!draw) {
+          if (win('C')) 'C' else 'H'
         } else 'D'
       }
 
       def winMove(player: Char): Int = {
         val s = if (player == 'C') comp else human
         if ( s.size >= 3 ) {
-          val w = emptyCells.filter( w => this.mark(player,w).win(player) )
+          val w = emptyCells.filter( w => mark(player,w).win(player) )
           if (w.size>0) w.head else 0
         } else 0
       }
@@ -107,29 +105,29 @@ object Tictac {
       def randMove(player: Char): Board = {
         //new stuff
         val w = winMove(player)
-        if (w>0) this.mark(player,w) else {
-          val A = this.emptyCells.toArray
+        if (w>0) mark(player,w) else {
+          val A = emptyCells.toArray
           val cell = A( rand.nextInt(A.size) );
-          this.mark(player, cell)
+          mark(player, cell)
         }
       }
       /** Plays a random game based on this current board starting with 
        *  `player`.
        */
       def randomGame(player: Char): Board = {
-        if (this.inProg) {
+        if (inProg) {
           randMove(player).randomGame(opp(player)) 
         } else this
       }
 
-      def winGame(player: Char): Int = if (this.winner==player||this.draw) 1 else 0
+      def winGame(player: Char): Int = if (winner==player||draw) 1 else 0
 
       /** prob of winning is computed by simulating N games that
        *  continue the game board and dividing the number of wins by N. 
        *  Each of the N simulations is a random game.
        */
       def probWin(player: Char, pos: Int, N: Int = 100): Double = {
-        val sumWin = (1 to N).toList.map(x => this.mark(player,pos).
+        val sumWin = (1 to N).toList.map(x => mark(player,pos).
             randomGame(opp(player)).winGame(player)).sum
         sumWin.toDouble / N.toDouble
       }
@@ -175,24 +173,24 @@ object Tictac {
           val x = readLine()
           if ( x == "" || !(emptyCells contains x.toInt) ) readMove() else x.toInt
         }
-        if (this.inProg) {
+        if (inProg) {
           println("Current Board:")
-          this.show
+          show
           if (player=='H') {
             val move = readMove()
-            this.mark('H',move).playBoard('C',N)
+            mark('H',move).playBoard('C',N)
           } else {
             println("Your opponent is thinking...")
-            val move = this.smartMove('C',N)
+            val move = smartMove('C',N)
             //val move = this.superSmartMove('C',N)
             println(Console.GREEN + "Computer moved to: " + move + Console.RESET)
-            this.mark('C',move).playBoard('H',N)
+            mark('C',move).playBoard('H',N)
           }
         } else {
           println("###################################")
-          show()
-          if ( draw() ) println("It's a draw!") else {
-            if ( winner() == 'H' ) { 
+          show
+          if ( draw ) println("It's a draw!") else {
+            if ( winner == 'H' ) { 
               print(Console.GREEN + "Woohoo! You win with: ")
               print(winSets.filter(x => x subsetOf human).flatten.toList.sorted)
               println(Console.RESET)
@@ -208,7 +206,7 @@ object Tictac {
         }
       }
 
-      def show() { print(this) }
+      def show = print(this) 
     }
 
     object Board {
