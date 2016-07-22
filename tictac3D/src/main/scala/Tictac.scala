@@ -20,13 +20,15 @@ object Tictac {
     val allCells = (1 to n*n*n).toSet
 
     class Cube(val r: Int, val c: Int, val l: Int) {
-      override def toString(): String = "("+r+","+c+","+l+")"
+      override def toString = "("+r+","+c+","+l+")"
       val z = (l-1)*n*n + (r-1)*n + c
-      def oob(): Boolean = r<1 || r>n || c<1 || c>n || l<1 || l>n
-      def moveTo(d: (Int,Int,Int)): Cube = new Cube(r+d._1, c+d._2, l+d._3)
+      def oob = r<1 || r>n || c<1 || c>n || l<1 || l>n
+      def moveTo(d: (Int,Int,Int)) = new Cube(r+d._1, c+d._2, l+d._3)
     }
 
     private val lst = List(-1,0,1)
+    //private val dirs = (for(i <- lst; j <- lst; k <- lst) yield (i,j,k)).
+    //  filterNot(x => x == (0,0,0))
     private val dirs = (for(i <- lst; j <- lst; k <- lst) yield (i,j,k)).
       filterNot(x => x == (0,0,0))
     private val coord = (1 to n).toList
