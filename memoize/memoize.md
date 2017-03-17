@@ -1,5 +1,14 @@
 # Memoize in Scala
 
+I started thinking about memoizing when I was implementing Dynamic
+Linear Models (DLM) for my time series course at UC Santa Cruz.
+DLMs make use of recursive definitions. Scala is great for recursion
+and functional programming, and I think the language is elegant. 
+Naturally, I wanted to write elegant and efficient code for DLMs in
+Scala. Recursion can be sped up with memoization. The trade-off is storage
+for speed. This led me to learn about memoization. Below is a more
+concrete motivation for using memoization.
+
 Observe the slow Fibonacci function below
 
 ```scala
