@@ -40,11 +40,8 @@ This is one way to memoize in Scala.
 ```scala
 import scala.collection.mutable
 
-// specifically, it returns a hashmap (which has type I=>O)
-// memoize(f)(key) will return the lookup value of the hashmap (if it exists) 
-// or compute it with f (if it doesn't already exist).
-def memoize[I, O](f: I => O) = new mutable.HashMap[I, O] {
-  override def apply(key: I) = getOrElseUpdate(key, f(key))
+def memoize[I, O](f: I => O): I => O = new mutable.HashMap[I, O] {
+  override def apply(key: I): O = getOrElseUpdate(key, f(key))
 }
 
 val fib: Int => BigInt = memoize {
@@ -57,10 +54,24 @@ fib(10) // returns 55
 
 ```
 
+<<<<<<< HEAD
 `memoize` is a generic function that takes in a function and returns a 
 mutable map. The mutable map's `apply` method is overridden so as to 
 return the lookup value corresponding to an input key, or compute it
 using `f`, then store the value in the map, then return it.
+=======
+`memoize` is a partial function that takes a function of arity one and returns
+a new partial function. Specifically, a mutable hashmap is returned.
+`memoize(f)(key)` will return the lookup value of the hashmap (if it exists),
+or compute and return it with f (if it doesn't already exist).
+
+Note these functions all have type `I => O`. For partial functions,
+an `apply` method is defined to dictate what applying an argument would do.
+In this case, the partial function has type mutable hashmap, so the 
+apply method is already defined, but it can be overridden. The return value
+given an argument is not the lookup value at the key, or is computed on the
+fly using `f`.
+>>>>>>> d40061f8a0cb9d882c66641cee225075390b0aaf
 
 `fib` is again a function. It returns the `memoize` function which takes as an 
 argument an anonymous function in the form of a series of case statements. 
