@@ -43,8 +43,8 @@ import scala.collection.mutable
 // specifically, it returns a hashmap (which has type I=>O)
 // memoize(f)(key) will return the lookup value of the hashmap (if it exists) 
 // or compute it with f (if it doesn't already exist).
-def memoize[I, O](f: I => O): I => O = new mutable.HashMap[I, O] {
-  override def apply(key: I): O = getOrElseUpdate(key, f(key))
+def memoize[I, O](f: I => O) = new mutable.HashMap[I, O] {
+  override def apply(key: I) = getOrElseUpdate(key, f(key))
 }
 
 val fib: Int => BigInt = memoize {
@@ -57,19 +57,17 @@ fib(10) // returns 55
 
 ```
 
-`memoize` is a partial function that takes a function of arity one and returns
-a new partial function. Specifically, a mutable hashmap is returned.
-Note these functions all have type `I => O`. For partial functions,
-an `apply` method is defined to dictate what applying an argument would do.
-In this case, the partial function has type mutable hashmap, so the 
-apply method is already defined, but it can be overridden. The return value
-given an argument is not the lookup value at the key, or is computed on the
-fly using `f`.
+`memoize` is a generic function that takes in a function and returns a 
+mutable map. The mutable map's `apply` method is overridden so as to 
+return the lookup value corresponding to an input key, or compute it
+using `f`, then store the value in the map, then return it.
 
-`fib` is again a function. It returns the `memoize` which takes as an argument
-the anonymous function. And then it returns the answer when we apply an argument.
+`fib` is again a function. It returns the `memoize` function which takes as an 
+argument an anonymous function in the form of a series of case statements. 
+And then it returns the answer when we apply the resulting function to 
+an argument. That is we apply `fib` to an argument `x` by `fib(x)`.
 
-That is `fib(10)` will now return the value we want.
+That is `fib(10)` will now return the value we want (55).
 
 Note that this will be faster for larger arguments. But, one should be careful
 to start computing fib when it is small. A first call to fib of
