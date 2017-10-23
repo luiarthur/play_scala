@@ -8,21 +8,38 @@ abstract class BayesDsl {
   case class Vec(t:Type, size:Symbol) extends Type
   case class Mat(t:Type, row:Symbol, col:Symbol) extends Type
 
-  type T = Type
+  sealed abstract class specialValues
+  case class I(n:Any) extends specialValues
 
-  val Data: Map[Symbol, T]
-  //val Likdlihood: ???
-  //val Priors: ???
-  //val Init: ???
-  //val Proposal: ???
+  sealed abstract class Distributions 
+  case class Normal(mean:Any, sd:Any) extends Distributions
+  case class MvNormal(m:Any, S:Any) extends Distributions
+  case class Gamma(shape:Any, rate:Any) extends Distributions
+  case class InvGamma(a:Any, b:Any) extends Distributions
+  case class Uniform(a:Any, b:Any) extends Distributions
+
+
+  val Data: Map[Symbol, Type]
+  val Likelihood: Map[Symbol, Distributions]
+  val Priors: Map[Symbol, Distributions]
+  val Init: Map[Symbol, Any] = Map()
+  val Proposal: Map[Symbol, Distributions] = Map()
   //val Other: ???
 
-  def generateCode() = {
-    ???
-  }
+  def print = {
+    val tab = "    "
+    println("Data:")
+    Data.foreach{ i => println(tab + i._1.name + ": " + i._2) }
 
-  implicit def distributed(sym:Symbol) = {
-    println("Hi")
+    println("\nLikelihood:")
+    Likelihood.foreach{ 
+      i => println(tab + i._1.name + " ~ " + i._2) 
+    }
+
+    println("\nPrior:")
+    Priors.foreach { 
+      i => println(tab + i._1.name + " ~ " + i._2) 
+    }
   }
 }
 
@@ -32,12 +49,8 @@ object myMCMC extends BayesDsl {
                  'X -> Mat(Double, 'N, 'K),
                  'Z -> Arr(Mat(Int, 'J, 'N_i), 'I))
 
-  //'y.distributed
-  //distributed('y)
-
-  def main(args:Array[String]=Array()) = {
-    Data.foreach{ i => println(i._2) }
-  }
+  val Likelihood = Map('y -> Normal('X__times__beta, I('N)))
+  val Priors = Map('beta -> Normal(0, I('K)))
 }
 
-myMCMC.main()
+myMCMC.print
