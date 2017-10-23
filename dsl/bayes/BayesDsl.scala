@@ -41,17 +41,3 @@ object myMCMC extends BayesDsl {
 }
 
 myMCMC.main()
-
-/*
-import scala.language.implicitConversions
-case class LineBuilder(num:Int) {
-  object PRINT {
-    def apply(str:String) = println(str)
-  }
-}
-implicit def int2LineBuilder(i: Int) = LineBuilder(i)
-
-10 PRINT "STR"
-
-def PRINT(implicit v:String) = println(v)
-*/

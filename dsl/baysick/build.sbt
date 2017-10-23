@@ -1,9 +1,18 @@
 name := "baysick"
 
-version := "1.0-SNAPSHOT"
+//version := "1.0-SNAPSHOT"
+//
+//scalaVersion := "2.10.3"
+//
+//libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+//
+//libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-compiler" % _ )
 
-scalaVersion := "2.10.3"
+version := "0.1.0"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+scalaVersion := "2.11.8"
 
-libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-compiler" % _ )
+libraryDependencies ++= Seq(
+  "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+)
+
