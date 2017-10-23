@@ -1,23 +1,33 @@
-trait BayesDsl  {
-  abstract sealed class ValidTypes
-  type T <: ValidTypes
-  case class Int() extends ValidTypes
-  case class Double() extends ValidTypes
-  case class Vec[T](n:Symbol) extends ValidTypes 
-  case class Mat[T](n:Symbol) extends ValidTypes
-  case class Arr[T](n:Symbol) extends ValidTypes
+trait BayesDsl {
+  sealed abstract class Type
+  object Int extends Type { override def toString = "Int"}
+  object Double extends Type { override def toString = "Double"}
+  case class Arr(t:Type, size:Symbol) extends Type
+  case class Vec(t:Type, size:Symbol) extends Type
+  case class Mat(t:Type, row:Symbol, col:Symbol) extends Type
 
-  val Data: Map[Symbol, ValidTypes]
+  type T = Type
+
+  val Data: Map[Symbol, T]
+  //val Likdlihood: ???
+  //val Priors: ???
+  //val Init: ???
+  //val Proposal: ???
+  //val Other: ???
+
+  def generateCode() = {
+    ???
+  }
 }
-
-
 
 object myMCMC extends BayesDsl {
-  val Data = Map('y -> Vec[Double]('N), 
-                 'X -> Mat[Double]('NxM),
-                 'Z -> Arr[Mat[Int]]('I__JxN_i))
+  val Data = Map('y -> Vec(Int, 'N), 
+                 'X -> Mat(Double, 'N, 'K),
+                 'Z -> Arr(Mat(Int, 'J, 'N_i), 'I))
 
-  Data.foreach{ i => println(i._2) }
+  def main(args:Array[String]=Array()) = {
+    Data.foreach{ i => println(i._2) }
+  }
 }
 
-myMCMC
+myMCMC.main()
