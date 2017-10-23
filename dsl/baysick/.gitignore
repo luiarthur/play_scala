@@ -1,0 +1,11 @@
+.idea
+target
+project
+classes
+bin
+dist
+.project
+.classpath
+.manager
+.settings
+*~
