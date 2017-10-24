@@ -1,0 +1,25 @@
+# This is a comment
+# TODO NOTE FIXME
+
+Data {
+  y: Vector<Double>  
+  X: Matrix<Double>
+
+  let (N,K) = X.dim
+  assert(y.size == N)
+}
+
+Likelihood {
+}
+
+Prior {
+}
+
+Proposal {
+}
+
+Init {
+}
+
+Options {
+}
