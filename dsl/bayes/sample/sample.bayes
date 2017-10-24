@@ -12,7 +12,7 @@ Data {
 }
 
 Likelihood {
-  y ~ MvNormal(X beta,  sig2 I_n)
+  y ~ MvNormal(X * beta,  sig2 * I_n)
 }
 
 Prior {
@@ -20,8 +20,8 @@ Prior {
   val a: Double
   val b: Double
 
-  \beta ~ MvNormal(0, s2 I_k)
-  \sigma^2 ~ InvGamma(a, b)
+  beta ~ MvNormal(0, s2 * I_k)
+  sig2 ~ InvGamma(a, b)
 }
 
 Proposal {
