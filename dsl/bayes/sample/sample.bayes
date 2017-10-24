@@ -2,20 +2,31 @@
 # TODO NOTE FIXME
 
 Data {
-  y: Vector<Double>  
-  X: Matrix<Double>
+  val y: Vector<Double>  
+  val X: Matrix<Double>
 
   let (N,K) = X.dim
+  let I_n = eye(N)
+  let I_k = eye(K)
   assert(y.size == N)
 }
 
 Likelihood {
+  y ~ MvNormal(X beta,  sig2 I_n)
 }
 
 Prior {
+  val s2: Double
+  val a: Double
+  val b: Double
+
+  \beta ~ MvNormal(0, s2 I_k)
+  \sigma^2 ~ InvGamma(a, b)
 }
 
 Proposal {
+  new beta ~ MvNormal(beta, Sig_beta)
+  new sig2 ~ exp( Normal(log(sig2, cs_sig2)) )
 }
 
 Init {
